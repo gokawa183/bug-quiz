@@ -1,6 +1,10 @@
 export const bugReleaseNotes = [
   {
-    version: "v4.13", date: "2026-05-15", tag: "LATEST", tagColor: "#00ff88",
+    version: "v4.14", date: "2026-05-15", tag: "LATEST", tagColor: "#00ff88",
+    changes: [{ type: "NEW", text: "BUG HUNT 問題を 20問 → 30問に増加（EASY +3 / NORMAL +4 / HARD +3）。追加カテゴリ：ループ制御・配列・文字列操作・条件分岐・型演算子の VB.NET 固有バグ" }],
+  },
+  {
+    version: "v4.13", date: "2026-05-15", tag: "", tagColor: "",
     changes: [{ type: "NEW", text: "「苦手つぶしモード」タブを追加：不正解問題を localStorage に蓄積し、同カテゴリを優先出題するセッションを開始できる（BUG HUNT 専用）" }],
   },
   {
