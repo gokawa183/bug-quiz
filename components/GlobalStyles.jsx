@@ -13,6 +13,15 @@ export default function GlobalStyles() {
       .action-btn:hover { opacity:0.85; box-shadow:0 0 24px rgba(255,255,255,0.15) !important; }
       .line-row { transition:background 0.1s; }
       .hint-btn:hover { opacity:0.8; }
+      @keyframes marquee-x {
+        from { transform: translateX(110vw); }
+        to   { transform: translateX(-110vw); }
+      }
+      .ascii-outer { overflow-x: auto; text-align: center; }
+      @media (max-width: 640px) {
+        .ascii-outer { overflow: hidden; }
+        .ascii-inner { display: inline-block; animation: marquee-x 22s linear infinite; }
+      }
       @keyframes verdict-in {
         0%  { opacity:0; transform:scale(0.7) translateY(-8px); }
         60% { transform:scale(1.06) translateY(2px); }
