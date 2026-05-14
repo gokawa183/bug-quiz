@@ -1,6 +1,10 @@
 export const bugReleaseNotes = [
   {
-    version: "v4.9", date: "2026-05-14", tag: "LATEST", tagColor: "#00ff88",
+    version: "v4.10", date: "2026-05-14", tag: "LATEST", tagColor: "#00ff88",
+    changes: [{ type: "FIX", text: "問題ID6「フラグ初期値の誤り」を再設計：コードに実際のバグがなく説明も誤りだったため、isEmpty=Trueで非空入力を誤判定するバグに修正" }],
+  },
+  {
+    version: "v4.9", date: "2026-05-14", tag: "", tagColor: "",
     changes: [{ type: "FIX", text: "問題ID8「整数除算の誤差」を再設計：VB.NETでは/は浮動小数点除算のため、整数除算演算子\\を使ったバグに変更" }],
   },
   {
