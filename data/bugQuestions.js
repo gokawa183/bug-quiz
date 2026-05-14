@@ -6,7 +6,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "5行目: `For i = 0 To 10` → `For i = 1 To 10`",
     explanation: "ループが i=0 から始まるため仕様「1から10」に反します。偶然合計値は同じですが意味的に誤りです。",
     hint: "ループの開始値に注目してください",
-    difficulty: "EASY",
+    difficulty: "EASY", category: "ループ制御",
     lines: ["Dim total As Integer","Dim i As Integer","","total = 0","For i = 0 To 10","    total = total + i","Next i","","'Console.WriteLine(\"合計: \" & total)"],
   },
   {
@@ -16,7 +16,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "4行目: `arr.Length` → `arr.Length - 1`",
     explanation: "arr.Length は 5 ですが配列インデックスは 0〜4。i=5 のとき IndexOutOfRangeException が発生します。",
     hint: "配列のインデックスは何番から始まりますか？",
-    difficulty: "EASY",
+    difficulty: "EASY", category: "配列",
     lines: ["Dim arr() As Integer = {10, 20, 30, 40, 50}","Dim i As Integer","","For i = 0 To arr.Length","    Console.WriteLine(arr(i))","Next i"],
   },
   {
@@ -26,7 +26,7 @@ export const BUG_QUESTIONS = [
     bugDescription: '3行目: `"Admin"` → `"admin"`',
     explanation: '比較対象が `"Admin"`（大文字A）のため、"admin" を入力しても一致しません。',
     hint: "比較する文字列の大文字・小文字をよく見てください",
-    difficulty: "EASY",
+    difficulty: "EASY", category: "文字列操作",
     lines: ["Dim input As String = Console.ReadLine()","","If input = \"Admin\" Then","    Console.WriteLine(\"ログイン成功\")","Else","    Console.WriteLine(\"失敗\")","End If"],
   },
   {
@@ -36,7 +36,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "3行目: `num < 0` → `num > 0`",
     explanation: "`If num < 0` は「0未満のとき」が条件です。0より大きい数を出力するには `num > 0` が正しいです。",
     hint: "条件の向き（大なり・小なり）を確認してください",
-    difficulty: "EASY",
+    difficulty: "EASY", category: "条件分岐",
     lines: ["Dim num As Integer = 5","","If num < 0 Then","    Console.WriteLine(\"正の数: \" & num)","End If"],
   },
   {
@@ -46,7 +46,7 @@ export const BUG_QUESTIONS = [
     bugDescription: '4行目: `& a & b` → `& (a + b)`',
     explanation: '`& a & b` は文字列連結なので "合計: 35" と表示されます。数値として足すには `(a + b)` が必要です。',
     hint: "& 演算子と + 演算子の違いを考えてください",
-    difficulty: "EASY",
+    difficulty: "EASY", category: "文字列操作",
     lines: ["Dim a As Integer = 3","Dim b As Integer = 5","","Console.WriteLine(\"合計: \" & a & b)"],
   },
   {
@@ -56,7 +56,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "1行目: `found = True` → `found = False`（未発見が初期状態なので False で初期化すべき）",
     explanation: "target の値 7 は配列 {3, 5, 9, 2} に存在しないため、For Each ループ内の If ブロックは一度も実行されません。found が True で初期化されているため、発見できていないのに「発見: True」と出力されます。初期値は「まだ見つかっていない」= False にすべきです。",
     hint: "target の値は配列の中に存在しますか？",
-    difficulty: "EASY",
+    difficulty: "EASY", category: "変数初期化",
     lines: ["Dim found As Boolean = True","Dim target As Integer = 7","Dim nums() As Integer = {3, 5, 9, 2}","","For Each n In nums","    If n = target Then","        found = True","    End If","Next","","Console.WriteLine(\"発見: \" & found)"],
   },
   {
@@ -66,7 +66,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "2行目: `If n = 1` → `If n <= 1`",
     explanation: "n=0 のとき `If n = 1` は False なので無限再帰になります。0!=1 を扱うために `If n <= 1` が必要です。",
     hint: "0を入力したらどうなりますか？",
-    difficulty: "NORMAL",
+    difficulty: "NORMAL", category: "再帰",
     lines: ["Function Factorial(n As Integer) As Integer","    If n = 1 Then","        Return 1","    End If","    Return n * Factorial(n - 1)","End Function"],
   },
   {
@@ -76,7 +76,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "5行目: `(a + b) \\ 2` → `(a + b) / 2`（`\\` は整数除算のため小数が切り捨てられる）",
     explanation: "VB.NET の `\\` は整数除算演算子で `(7 + 2) \\ 2 = 9 \\ 2 = 4` と小数部が切り捨てられます。avg が Double 型でも、代入される値はすでに Integer の 4 です。浮動小数点除算には `/`（スラッシュ）を使い、`(7 + 2) / 2 = 4.5` が正しく得られます。",
     hint: "/ と \\ は別の演算子です。それぞれ何除算ですか？",
-    difficulty: "NORMAL",
+    difficulty: "NORMAL", category: "型・演算子",
     lines: ["Dim a As Integer = 7","Dim b As Integer = 2","Dim avg As Double","","avg = (a + b) \\ 2","Console.WriteLine(\"平均: \" & avg)"],
   },
   {
@@ -86,7 +86,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "5行目: `ElseIf score >= 80` → `ElseIf score >= 70`（A判定と同じ条件のためBに絶対到達しない）",
     explanation: "score >= 80 の条件は3行目の `If score >= 80` ですでに評価されています。ElseIf に到達するのは score < 80 のときだけなので、`ElseIf score >= 80` は永遠に True になりません（デッドコード）。`>= 70` に修正することで 70〜79点を正しく「B」と判定できます。",
     hint: "ElseIf に到達したとき、score はどんな値の範囲ですか？",
-    difficulty: "NORMAL",
+    difficulty: "NORMAL", category: "条件分岐",
     lines: ["Dim score As Integer = 75","","If score >= 80 Then","    Console.WriteLine(\"A\")","ElseIf score >= 80 Then","    Console.WriteLine(\"B\")","ElseIf score >= 60 Then","    Console.WriteLine(\"C\")","Else","    Console.WriteLine(\"不合格\")","End If"],
   },
   {
@@ -96,7 +96,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "5行目: `i = i - 1` → `i = i + 1`",
     explanation: "i をデクリメントしているため条件 `i <= 5` が常に True になります。正しくはインクリメント `i = i + 1`。",
     hint: "ループ変数が正しい方向に変化していますか？",
-    difficulty: "NORMAL",
+    difficulty: "NORMAL", category: "ループ制御",
     lines: ["Dim i As Integer = 1","","Do While i <= 5","    Console.WriteLine(i)","    i = i - 1","Loop"],
   },
   {
@@ -106,7 +106,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "9行目: `Case 6` → `Case 6, 7`（7が未定義）",
     explanation: "Case 7（日曜）が定義されていないため、7が入力されると Case Else「不明」に分岐します。",
     hint: "すべての曜日がカバーされていますか？",
-    difficulty: "NORMAL",
+    difficulty: "NORMAL", category: "条件分岐",
     lines: ["Dim day As Integer = 7","","Select Case day","    Case 1 : Console.WriteLine(\"月\")","    Case 2 : Console.WriteLine(\"火\")","    Case 3 : Console.WriteLine(\"水\")","    Case 4 : Console.WriteLine(\"木\")","    Case 5 : Console.WriteLine(\"金\")","    Case 6 : Console.WriteLine(\"土・日\")","    Case Else : Console.WriteLine(\"不明\")","End Select"],
   },
   {
@@ -116,7 +116,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "3行目: `password.Length < 8` → `password.Length >= 8`",
     explanation: "条件が逆です。`Length < 8` は「8文字未満のとき有効」と判定してしまいます。",
     hint: "If の条件式の向きを確認してください",
-    difficulty: "NORMAL",
+    difficulty: "NORMAL", category: "条件分岐",
     lines: ["Dim password As String = \"mypassword\"","","If password.Length < 8 Then","    Console.WriteLine(\"有効なパスワードです\")","Else","    Console.WriteLine(\"短すぎます\")","End If"],
   },
   {
@@ -126,7 +126,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "3行目: `num Mod 2 = 1` → `num Mod 2 <> 0`",
     explanation: "負の数では VB.NET の Mod は負の余りを返します（例: -3 Mod 2 = -1）。`= 1` では負の奇数を見逃します。",
     hint: "負の数のとき Mod の結果はどうなりますか？",
-    difficulty: "NORMAL",
+    difficulty: "NORMAL", category: "型・演算子",
     lines: ["Dim num As Integer = -3","","If num Mod 2 = 1 Then","    Console.WriteLine(\"奇数\")","Else","    Console.WriteLine(\"偶数\")","End If"],
   },
   {
@@ -136,7 +136,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "2行目: `= original` → `= New List(Of Integer)(original)`",
     explanation: "List は参照型なので `copy = original` は同じオブジェクトを指します。独立したコピーには `New List(Of Integer)(original)` が必要です。",
     hint: "List は ValueType？ ReferenceType？",
-    difficulty: "HARD",
+    difficulty: "HARD", category: "型・演算子",
     lines: ["Dim original As New List(Of Integer)({1, 2, 3})","Dim copy As List(Of Integer) = original","","copy.Add(4)","","Console.WriteLine(\"元: \" & original.Count)","Console.WriteLine(\"コピー: \" & copy.Count)"],
   },
   {
@@ -146,7 +146,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "3行目の前に `If person IsNot Nothing Then` チェックが必要",
     explanation: "GetPersonById(99) は Nothing を返します。Nothing.Name を呼び出すと NullReferenceException が発生します。",
     hint: "GetPersonById が常に有効なオブジェクトを返すとは限りません",
-    difficulty: "HARD",
+    difficulty: "HARD", category: "Null参照",
     lines: ["Dim person As Person = GetPersonById(99)","","Console.WriteLine(person.Name)","","Function GetPersonById(id As Integer) As Person","    If id = 1 Then","        Return New Person(\"Alice\")","    End If","    Return Nothing","End Function"],
   },
   {
@@ -156,7 +156,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "6行目: AddHandler が毎回呼ばれ二重登録になる。Form_Load 内の1回のみにすべき",
     explanation: "ShowResult() が呼ばれるたびに AddHandler が実行され、ハンドラが累積登録されます。クリックするたびに処理が2回・3回と増えます。",
     hint: "AddHandler がどの頻度で呼ばれているか追ってみてください",
-    difficulty: "HARD",
+    difficulty: "HARD", category: "イベント",
     lines: ["Private Sub Form_Load(...)","    ShowResult()","End Sub","","Private Sub ShowResult()","    AddHandler Button1.Click, AddressOf Button1_Click","    Label1.Text = \"準備完了\"","End Sub","","Private Sub Button1_Click(...)","    MessageBox.Show(\"クリックされました\")","End Sub"],
   },
   {
@@ -166,7 +166,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "1行目: `Dim result As Integer` → `Dim result As Long`",
     explanation: "Integer の最大値は約21億。100000×100000=10,000,000,000 はその範囲を超えオーバーフロー例外が発生します。",
     hint: "Integer が扱える最大値を考えてください",
-    difficulty: "HARD",
+    difficulty: "HARD", category: "型・演算子",
     lines: ["Dim result As Integer","Dim a As Integer = 100000","Dim b As Integer = 100000","","result = a * b","Console.WriteLine(\"結果: \" & result)"],
   },
   {
@@ -176,7 +176,7 @@ export const BUG_QUESTIONS = [
     bugDescription: '4行目: `s.Substring(6, 2)` → `s.Substring(5, 2)`（インデックスが1つずれて月が "5-" になる）',
     explanation: '"2026-05-14" のインデックスは 0="2",1="0",2="2",3="6",4="-",5="0",6="5",7="-",8="1",9="4" です。月 "05" は index 5 から始まるため Substring(5, 2) が正しく、Substring(6, 2) では "5-" が取得されます。',
     hint: "区切り文字 \"-\" が何番目のインデックスにあるか0から数えてみてください",
-    difficulty: "HARD",
+    difficulty: "HARD", category: "文字列操作",
     lines: ["Dim s As String = \"2026-05-14\"","","Dim year  As String = s.Substring(0, 4)","Dim month As String = s.Substring(6, 2)","Dim day   As String = s.Substring(8, 2)","","Console.WriteLine(year & \"/\" & month & \"/\" & day)","' 期待値: \"2026/05/14\""],
   },
   {
@@ -186,7 +186,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "1行目: `ByRef` → `ByVal`（戻り値で返すべき）",
     explanation: "ByRef は参照渡しなので呼び出し元の `value` が書き換えられます。意図が「値を返す」なら ByVal + 戻り値にすべきです。",
     hint: "ByRef と ByVal の違いを確認してください",
-    difficulty: "HARD",
+    difficulty: "HARD", category: "引数渡し",
     lines: ["Sub DoubleValue(ByRef x As Integer)","    x = x * 2","End Sub","","Dim value As Integer = 5","DoubleValue(value)","Console.WriteLine(\"元の値: \" & value)"],
   },
   {
@@ -196,7 +196,7 @@ export const BUG_QUESTIONS = [
     bugDescription: "3行目の前に `If s IsNot Nothing Then` チェックが必要",
     explanation: "s が Nothing のとき `s.Length` を呼び出すと NullReferenceException が発生します。",
     hint: "s が Nothing の場合を考えてみてください",
-    difficulty: "HARD",
+    difficulty: "HARD", category: "Null参照",
     lines: ["Dim s As String = GetInput()","","Console.WriteLine(\"長さ: \" & s.Length)","","Function GetInput() As String","    Return Nothing","End Function"],
   },
 ];

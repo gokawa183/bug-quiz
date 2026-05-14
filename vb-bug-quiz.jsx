@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { pickBugQuestions, pickSmellQuestions } from "./utils/quiz";
+import { pickBugQuestions, pickSmellQuestions, pickWeakQuestions } from "./utils/quiz";
+import { loadWeaknesses, saveWeakness, clearWeaknesses } from "./utils/weakness";
 import { MODE_THEME } from "./constants/theme";
 import GlobalStyles  from "./components/GlobalStyles";
 import TitleScreen   from "./components/TitleScreen";
@@ -7,19 +8,20 @@ import QuizScreen    from "./components/QuizScreen";
 import ResultScreen  from "./components/ResultScreen";
 
 export default function App() {
-  const [mode,      setMode]      = useState("bug");
-  const [screen,    setScreen]    = useState("title");
-  const [titleTab,  setTitleTab]  = useState("home");
-  const [questions, setQuestions] = useState(() => pickBugQuestions());
-  const [currentQ,  setCurrentQ]  = useState(0);
-  const [selected,  setSelected]  = useState(null);
-  const [revealed,  setRevealed]  = useState(false);
-  const [score,     setScore]     = useState(0);
-  const [hintUsed,  setHintUsed]  = useState(false);
-  const [showHint,  setShowHint]  = useState(false);
-  const [answers,   setAnswers]   = useState([]);
-  const [blink,     setBlink]     = useState(true);
-  const [scanLine,  setScanLine]  = useState(0);
+  const [mode,       setMode]       = useState("bug");
+  const [screen,     setScreen]     = useState("title");
+  const [titleTab,   setTitleTab]   = useState("home");
+  const [questions,  setQuestions]  = useState(() => pickBugQuestions());
+  const [currentQ,   setCurrentQ]   = useState(0);
+  const [selected,   setSelected]   = useState(null);
+  const [revealed,   setRevealed]   = useState(false);
+  const [score,      setScore]      = useState(0);
+  const [hintUsed,   setHintUsed]   = useState(false);
+  const [showHint,   setShowHint]   = useState(false);
+  const [answers,    setAnswers]    = useState([]);
+  const [blink,      setBlink]      = useState(true);
+  const [scanLine,   setScanLine]   = useState(0);
+  const [weaknesses, setWeaknesses] = useState(() => loadWeaknesses());
 
   useEffect(() => {
     const t = setInterval(() => setBlink(v => !v), 530);
@@ -52,6 +54,9 @@ export default function App() {
     setScore(s => s + points);
     setAnswers(a => [...a, { correct, hintUsed, points }]);
     setRevealed(true);
+    if (!correct && isBugMode) {
+      setWeaknesses(saveWeakness(q.id, q.category));
+    }
   };
 
   const handleNext = () => {
@@ -93,6 +98,22 @@ export default function App() {
     setAnswers([]);
     setScreen("title");
     setTitleTab("home");
+  };
+
+  const handleStartWeak = () => {
+    setQuestions(pickWeakQuestions(weaknesses));
+    setCurrentQ(0);
+    setSelected(null);
+    setRevealed(false);
+    setScore(0);
+    setHintUsed(false);
+    setShowHint(false);
+    setAnswers([]);
+    setScreen("quiz");
+  };
+
+  const handleClearWeaknesses = () => {
+    setWeaknesses(clearWeaknesses());
   };
 
   const G  = th.accent;
@@ -167,7 +188,8 @@ export default function App() {
               <TitleScreen
                 blink={blink} th={th} titleTab={titleTab} setTitleTab={setTitleTab}
                 setScreen={setScreen} isBugMode={isBugMode} isSmellMode={isSmellMode}
-                maxScore={maxScore}
+                maxScore={maxScore} weaknesses={weaknesses}
+                onStartWeak={handleStartWeak} onClearWeaknesses={handleClearWeaknesses}
               />
             )}
             {screen === "quiz" && (

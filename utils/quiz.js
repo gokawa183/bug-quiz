@@ -21,3 +21,15 @@ export function pickBugQuestions() {
 export function pickSmellQuestions() {
   return shuffle(SMELL_QUESTIONS).slice(0, SMELL_PER_SESSION);
 }
+
+export function pickWeakQuestions(weaknesses) {
+  const wrongIds = new Set(Object.keys(weaknesses).map(Number));
+  if (wrongIds.size === 0) return pickBugQuestions();
+
+  const wrongQs  = shuffle(BUG_QUESTIONS.filter(q => wrongIds.has(q.id)));
+  const weakCats = new Set(wrongQs.map(q => q.category));
+  const sameQs   = shuffle(BUG_QUESTIONS.filter(q => !wrongIds.has(q.id) && weakCats.has(q.category)));
+  const restQs   = shuffle(BUG_QUESTIONS.filter(q => !wrongIds.has(q.id) && !weakCats.has(q.category)));
+
+  return [...wrongQs, ...sameQs, ...restQs].slice(0, BUG_PER_SESSION);
+}

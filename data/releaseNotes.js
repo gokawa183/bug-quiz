@@ -1,6 +1,10 @@
 export const bugReleaseNotes = [
   {
-    version: "v4.12", date: "2026-05-14", tag: "LATEST", tagColor: "#00ff88",
+    version: "v4.13", date: "2026-05-15", tag: "LATEST", tagColor: "#00ff88",
+    changes: [{ type: "NEW", text: "「苦手つぶしモード」タブを追加：不正解問題を localStorage に蓄積し、同カテゴリを優先出題するセッションを開始できる（BUG HUNT 専用）" }],
+  },
+  {
+    version: "v4.12", date: "2026-05-14", tag: "", tagColor: "",
     changes: [{ type: "FIX", text: "問題ID8「整数除算の誤差」のコードを修正：`a \\ b`（a÷b）から `(a + b) \\ 2`（平均計算）に変更し、問題文・期待値・解説を整合させた" }],
   },
   {

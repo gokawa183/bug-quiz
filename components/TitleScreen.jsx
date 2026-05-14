@@ -3,7 +3,7 @@ import { SMELL_QUESTIONS } from "../data/smellQuestions";
 import { bugReleaseNotes, smellReleaseNotes } from "../data/releaseNotes";
 import { BUG_PER_SESSION, SMELL_PER_SESSION, difficultyColor, changeTypeStyle } from "../constants/theme";
 
-export default function TitleScreen({ blink, th, titleTab, setTitleTab, setScreen, isBugMode, isSmellMode, maxScore }) {
+export default function TitleScreen({ blink, th, titleTab, setTitleTab, setScreen, isBugMode, isSmellMode, maxScore, weaknesses, onStartWeak, onClearWeaknesses }) {
   const G  = th.accent;
   const GD = th.accentDim;
   const notes = isBugMode ? bugReleaseNotes : smellReleaseNotes;
@@ -18,6 +18,21 @@ export default function TitleScreen({ blink, th, titleTab, setTitleTab, setScree
     { label: "PER SESSION",   value: `${SMELL_PER_SESSION} 問（ランダム）` },
     { label: "MAX SCORE",     value: `${maxScore} pts` },
     { label: "SCORING",       value: "1問 10pt（ヒント使用 5pt）" },
+  ];
+
+  // Weakness stats
+  const catStats = {};
+  Object.values(weaknesses).forEach(w => {
+    catStats[w.category] = (catStats[w.category] || 0) + 1;
+  });
+  const sortedCats = Object.entries(catStats).sort((a, b) => b[1] - a[1]);
+  const maxCatCount = sortedCats.length > 0 ? sortedCats[0][1] : 1;
+  const wrongCount  = Object.keys(weaknesses).length;
+
+  const tabs = [
+    { id: "home",  label: "▸ HOME" },
+    ...(isBugMode ? [{ id: "weak",  label: "▸ 苦手つぶし" }] : []),
+    { id: "notes", label: "▸ RELEASE NOTES" },
   ];
 
   return (
@@ -48,7 +63,7 @@ export default function TitleScreen({ blink, th, titleTab, setTitleTab, setScree
 
       {/* Tabs */}
       <div style={{ display: "flex", borderBottom: `1px solid ${GD}`, marginBottom: "20px" }}>
-        {[{ id: "home", label: "▸ HOME" }, { id: "notes", label: "▸ RELEASE NOTES" }].map(tab => (
+        {tabs.map(tab => (
           <button key={tab.id} className="tab-btn" onClick={() => setTitleTab(tab.id)}
             style={{
               background:   titleTab === tab.id ? th.accentBg : "transparent",
@@ -114,6 +129,69 @@ export default function TitleScreen({ blink, th, titleTab, setTitleTab, setScree
               boxShadow: `0 0 20px ${th.accentBg}`, transition: "all 0.2s" }}>
             {blink ? "▶  START" : "▷  START"}
           </button>
+        </div>
+      )}
+
+      {/* 苦手つぶし tab */}
+      {titleTab === "weak" && (
+        <div>
+          {wrongCount === 0 ? (
+            <div style={{ textAlign: "center", padding: "36px 0" }}>
+              <div style={{ color: GD, fontSize: "32px", marginBottom: "14px", opacity: 0.5 }}>◎</div>
+              <div style={{ color: G, fontSize: "13px", letterSpacing: "0.1em", marginBottom: "10px" }}>記録なし</div>
+              <div style={{ color: GD, fontSize: "11px", lineHeight: "1.9" }}>
+                通常モードで問題を解くと<br />
+                間違えた問題がここに記録されます
+              </div>
+            </div>
+          ) : (
+            <div>
+              {/* Header */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                <div style={{ color: GD, fontSize: "10px", letterSpacing: "0.2em" }}>苦手カテゴリ分析</div>
+                <div style={{ color: GD, fontSize: "10px" }}>
+                  間違え問題数: <span style={{ color: G }}>{wrongCount} 問</span>
+                </div>
+              </div>
+
+              {/* Category list */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "22px" }}>
+                {sortedCats.map(([cat, count]) => (
+                  <div key={cat} style={{ display: "flex", alignItems: "center", gap: "10px",
+                    border: `1px solid ${GD}`, padding: "8px 12px", background: th.accentBg }}>
+                    <span style={{ color: G, fontSize: "12px", flex: 1 }}>{cat}</span>
+                    <span style={{ color: "#ff8866", fontSize: "11px", minWidth: "32px", textAlign: "right" }}>
+                      {count}問
+                    </span>
+                    <div style={{ width: "72px", height: "4px", background: "#0d200d", borderRadius: "2px", flexShrink: 0 }}>
+                      <div style={{ height: "100%", background: "#ff4466", borderRadius: "2px",
+                        width: `${Math.round((count / maxCatCount) * 100)}%`,
+                        boxShadow: "0 0 4px rgba(255,68,102,0.6)" }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Buttons */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+                <button className="action-btn" onClick={onStartWeak}
+                  style={{ background: "transparent", border: `1px solid ${G}`, color: G,
+                    padding: "14px 48px", fontSize: "14px", letterSpacing: "0.3em",
+                    cursor: "pointer", textShadow: `0 0 10px ${G}88`,
+                    boxShadow: `0 0 20px ${th.accentBg}`, transition: "all 0.2s" }}>
+                  {blink ? "▶  WEAK SESSION" : "▷  WEAK SESSION"}
+                </button>
+                <button onClick={onClearWeaknesses}
+                  style={{ background: "transparent", border: `1px solid ${GD}`, color: GD,
+                    padding: "5px 18px", fontSize: "10px", letterSpacing: "0.15em",
+                    cursor: "pointer", transition: "opacity 0.2s" }}
+                  onMouseEnter={e => e.currentTarget.style.opacity = "0.6"}
+                  onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
+                  データリセット
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
