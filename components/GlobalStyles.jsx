@@ -17,11 +17,8 @@ export default function GlobalStyles() {
         from { transform: translateX(110vw); }
         to   { transform: translateX(-110vw); }
       }
-      .ascii-outer { overflow-x: auto; text-align: center; }
-      @media (max-width: 640px) {
-        .ascii-outer { overflow: hidden; }
-        .ascii-inner { display: inline-block; animation: marquee-x 22s linear infinite; }
-      }
+      .ascii-outer { overflow: hidden; text-align: center; }
+      .ascii-inner { display: inline-block; animation: marquee-x 22s linear infinite; }
       @keyframes verdict-in {
         0%  { opacity:0; transform:scale(0.7) translateY(-8px); }
         60% { transform:scale(1.06) translateY(2px); }
